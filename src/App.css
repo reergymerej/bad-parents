@@ -1,33 +1,37 @@
-.App {
-  text-align: center;
+html, body, #root, .App {
+  height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Nav {
+  border: 1px solid green;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 2em;
+}
+
+.Nav a {
+  flex: 1;
+  height: 100%;
+  line-height: 2em;
+}
+
+a:hover {
+  background: green;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.DataRow {
+  line-height: 2em;
+  height: 2em;
+  border-bottom: 1px solid #555;
+  display: flex;
+  padding: 0.3em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.DataRow:nth-of-type(odd) {
+  background: rgba(39, 93, 93, 0.09);
 }
+
+.DataRow .Text {
+  flex: 1;
+}
+
