@@ -26,30 +26,20 @@ DataRow.defaultProps = {
 }
 
 
-const canDelete = (readOnly, isAdmin, isColors) => {
-  return readOnly
-    ? isAdmin && isColors
-    : isAdmin
-}
+const List = (props) => (
+  <div className="List">
+    { props.items.map((item) => (
+      <DataRow
+        canDelete={props.canDelete}
+        canPromote={props.canPromote}
+        canSelect={props.canSelect}
+        key={item.id}
+        text={item.text}
+      />
+    ))}
+  </div>
+)
 
-const List = (props) => {
-  const { user: { admin}} = props
-  return (
-    <div className="List">
-      { props.items.map((item) => (
-        <DataRow
-          key={item.id}
-          {...{
-            canDelete: props.canDelete,
-            canPromote: props.canPromote,
-            canSelect: props.canSelect,
-          }}
-          text={item.text}
-        />
-      ))}
-    </div>
-  )
-}
 
 const ReadOnlyList = (props) => {
   const { user: { admin}} = props
@@ -58,11 +48,7 @@ const ReadOnlyList = (props) => {
       {...props}
       canSelect={false}
       canPromote={false}
-      canDelete={canDelete(
-        true,
-        admin,
-        props.isColors
-      )}
+      canDelete={admin && props.isColors}
       readOnly
     />
   )
@@ -91,7 +77,7 @@ const canPromote = (admin, promoter, pendingVerification) => {
 
 function App() {
   const user = {
-    admin: false,
+    admin: true,
     promoter: true,
     pendingVerification: false,
   }
@@ -106,11 +92,7 @@ function App() {
         items={items}
         user={user}
         canPromote={userCanPromote}
-        canDelete={canDelete(
-          false,
-          user.admin,
-          false
-        )}
+        canDelete={user.admin}
       />
       <ReadOnlyList
         isColors
