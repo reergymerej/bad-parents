@@ -1,18 +1,6 @@
 import React from 'react';
 import './App.css';
 
-const canDelete = (readOnly, isAdmin, isColors) => {
-  return readOnly
-    ? isAdmin && isColors
-    : isAdmin
-}
-
-const canPromote = (readOnly, admin, promoter, pendingVerification) => {
-  return !readOnly
-    && (admin
-    || (promoter && !pendingVerification)
-    )
-}
 
 const DataRow = (props) => (
   <div className="DataRow">
@@ -31,7 +19,6 @@ const DataRow = (props) => (
   </div>
 )
 
-
 DataRow.defaultProps = {
   canDelete: false,
   canPromote: true,
@@ -39,8 +26,14 @@ DataRow.defaultProps = {
 }
 
 
+const canDelete = (readOnly, isAdmin, isColors) => {
+  return readOnly
+    ? isAdmin && isColors
+    : isAdmin
+}
+
 const List = (props) => {
-  const { user: { admin, promoter, pendingVerification }} = props
+  const { user: { admin}} = props
   return (
     <div className="List">
       { props.items.map((item) => (
@@ -51,12 +44,6 @@ const List = (props) => {
             canPromote: props.canPromote,
             canSelect: props.canSelect,
           }}
-          canPromote={canPromote(
-            props.readOnly,
-            admin,
-            promoter,
-            pendingVerification
-          )}
           canDelete={canDelete(
             props.readOnly,
             admin,
@@ -94,10 +81,17 @@ const colors = [
   { id: 'violet', text: 'violet' },
 ]
 
+const canPromote = (readOnly, admin, promoter, pendingVerification) => {
+  return !readOnly
+    && (admin
+    || (promoter && !pendingVerification)
+    )
+}
+
 function App() {
   const user = {
     admin: true,
-    promoter: true,
+    promoter: false,
     pendingVerification: false,
   }
   return (
@@ -105,6 +99,12 @@ function App() {
       <List
         items={items}
         user={user}
+        canPromote={canPromote(
+          false,
+          user.admin,
+          user.promoter,
+          user.pendingVerification
+        )}
       />
       <ReadOnlyList
         isColors
