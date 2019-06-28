@@ -99,37 +99,17 @@ function App() {
         canPromote={userCanPromote}
         canDelete={user.admin}
       />
+
       <ReadOnlyList
-        isColors
         items={colors}
         user={user}
-        canDelete={
-          (
-            (admin, isColors, isNames) => {
-              return admin && (isColors || isNames)
-            }
-          )(
-            user.admin,
-            true,
-            false
-          )
-        }
+        canDelete={user.admin}
       />
 
       <ReadOnlyList
-        isNames
         items={names}
         user={user}
-        canDelete={
-          (
-            (admin, isColors, isNames) => {
-              return admin && (isColors || isNames)
-            }
-          )(
-            user.admin,
-            false,
-            true
-          )}
+        canDelete={user.admin}
       />
     </div>
   )
