@@ -50,6 +50,12 @@ const ReadOnlyList = (props) => (
   />
 )
 
+const DeleteOverrideList = (props) => (
+  <ReadOnlyList
+    items={props.items}
+    canDelete
+  />
+)
 
 const items = [
   { id: 'a', text: 'Foo' },
@@ -95,21 +101,17 @@ function App() {
     <div className="App">
       <List
         items={items}
-        user={user}
         canPromote={userCanPromote}
         canDelete={user.admin}
       />
 
-      <ReadOnlyList
+      <DeleteOverrideList
         items={colors}
-        user={user}
         canDelete={user.admin}
       />
 
       <ReadOnlyList
         items={names}
-        user={user}
-        canDelete={user.admin}
       />
     </div>
   )
