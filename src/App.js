@@ -6,7 +6,9 @@ const DataRow = (props) => (
     <div className="Text">{props.text}</div>
     <div className="Controls">
       <button onClick={props.onSelect}>Select</button>
-      <button onClick={props.onDelete}>Delete</button>
+      { props.user && props.user.admin
+        && <button onClick={props.onDelete}>Delete</button>
+      }
     </div>
   </div>
 )
@@ -17,6 +19,7 @@ const List = (props) => (
       <DataRow
         key={item.id}
         {...item}
+        user={props.user}
       />
     ))}
   </div>
@@ -29,9 +32,15 @@ const items = [
 ]
 
 function App() {
+  const user = {
+    admin: true,
+  }
   return (
     <div className="App">
-      <List items={items} />
+      <List
+        items={items}
+        user={user}
+      />
     </div>
   )
 }
