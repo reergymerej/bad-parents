@@ -7,9 +7,11 @@ const canDelete = (readOnly, isAdmin, isColors) => {
     : isAdmin
 }
 
-const canPromote = (admin, promoter, pendingVerification) => {
-  return admin
+const canPromote = (readOnly, admin, promoter, pendingVerification) => {
+  return !readOnly
+    && (admin
     || (promoter && !pendingVerification)
+    )
 }
 
 const DataRow = (props) => (
@@ -44,7 +46,13 @@ const List = (props) => {
       { props.items.map((item) => (
         <DataRow
           key={item.id}
+          {...{
+            canDelete: props.canDelete,
+            canPromote: props.canPromote,
+            canSelect: props.canSelect,
+          }}
           canPromote={canPromote(
+            props.readOnly,
             admin,
             promoter,
             pendingVerification
@@ -54,8 +62,7 @@ const List = (props) => {
             admin,
             props.isColors
           )}
-          {...item}
-          {...props}
+          text={item.text}
         />
       ))}
     </div>
@@ -90,7 +97,7 @@ const colors = [
 function App() {
   const user = {
     admin: true,
-    promoter: false,
+    promoter: true,
     pendingVerification: false,
   }
   return (
