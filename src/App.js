@@ -81,30 +81,28 @@ const colors = [
   { id: 'violet', text: 'violet' },
 ]
 
-const canPromote = (readOnly, admin, promoter, pendingVerification) => {
-  return !readOnly
-    && (admin
+const canPromote = (admin, promoter, pendingVerification) => {
+  return admin
     || (promoter && !pendingVerification)
-    )
 }
 
 function App() {
   const user = {
-    admin: true,
-    promoter: false,
+    admin: false,
+    promoter: true,
     pendingVerification: false,
   }
+  const userCanPromote = canPromote(
+    user.admin,
+    user.promoter,
+    user.pendingVerification
+  )
   return (
     <div className="App">
       <List
         items={items}
         user={user}
-        canPromote={canPromote(
-          false,
-          user.admin,
-          user.promoter,
-          user.pendingVerification
-        )}
+        canPromote={userCanPromote}
       />
       <ReadOnlyList
         isColors
