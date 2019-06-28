@@ -12,38 +12,28 @@ const canPromote = (admin, promoter, pendingVerification) => {
     || (promoter && !pendingVerification)
 }
 
-const DataRow = (props) => {
-  const {
-    isColors,
-    onDelete,
-    onPromote,
-    onSelect,
-    readOnly,
-    text,
-    user = {},
-  } = props
-  const { admin } = user
-  return (
-    <div className="DataRow">
-      <div className="Text">{text}</div>
-      <div className="Controls">
-        { props.canSelect
-            && <button onClick={onSelect}>Select</button>
-        }
-        { props.canPromote
-            && <button onClick={onPromote}>Promote</button>
-        }
-        { canDelete(readOnly, admin, isColors)
-            && <button onClick={onDelete}>Delete</button>
-        }
-      </div>
+const DataRow = (props) => (
+  <div className="DataRow">
+    <div className="Text">{props.text}</div>
+    <div className="Controls">
+      { props.canSelect
+          && <button onClick={props.onSelect}>Select</button>
+      }
+      { props.canPromote
+          && <button onClick={props.onPromote}>Promote</button>
+      }
+      { props.canDelete
+          && <button onClick={props.onDelete}>Delete</button>
+      }
     </div>
-  )
-}
+  </div>
+)
+
 
 DataRow.defaultProps = {
-  canSelect: true,
+  canDelete: false,
   canPromote: true,
+  canSelect: true,
 }
 
 
@@ -58,6 +48,11 @@ const List = (props) => {
             admin,
             promoter,
             pendingVerification
+          )}
+          canDelete={canDelete(
+            props.readOnly,
+            admin,
+            props.isColors
           )}
           {...item}
           {...props}
@@ -94,7 +89,7 @@ const colors = [
 
 function App() {
   const user = {
-    admin: false,
+    admin: true,
     promoter: false,
     pendingVerification: false,
   }
