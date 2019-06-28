@@ -56,14 +56,22 @@ const List = (props) => {
   )
 }
 
-const ReadOnlyList = (props) => (
-  <List
-    {...props}
-    canSelect={false}
-    canPromote={false}
-    readOnly
-  />
-)
+const ReadOnlyList = (props) => {
+  const { user: { admin}} = props
+  return (
+    <List
+      {...props}
+      canSelect={false}
+      canPromote={false}
+      canDelete={canDelete(
+        true,
+        admin,
+        props.isColors
+      )}
+      readOnly
+    />
+  )
+}
 
 const items = [
   { id: 'a', text: 'Foo' },
@@ -88,7 +96,7 @@ const canPromote = (admin, promoter, pendingVerification) => {
 
 function App() {
   const user = {
-    admin: false,
+    admin: true,
     promoter: true,
     pendingVerification: false,
   }
