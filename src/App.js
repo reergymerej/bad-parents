@@ -7,11 +7,9 @@ const canDelete = (readOnly, isAdmin, isColors) => {
     : isAdmin
 }
 
-const canPromote = (readOnly, admin, promoter, pendingVerification) => {
-  return !readOnly
-    && (admin
-      || (promoter && !pendingVerification)
-    )
+const canPromote = (admin, promoter, pendingVerification) => {
+  return admin
+    || (promoter && !pendingVerification)
 }
 
 const DataRow = (props) => {
@@ -24,7 +22,7 @@ const DataRow = (props) => {
     text,
     user = {},
   } = props
-  const { promoter, pendingVerification, admin } = user
+  const { admin } = user
   return (
     <div className="DataRow">
       <div className="Text">{text}</div>
@@ -32,7 +30,7 @@ const DataRow = (props) => {
         { props.canSelect
             && <button onClick={onSelect}>Select</button>
         }
-        { canPromote(readOnly, admin, promoter, pendingVerification)
+        { props.canPromote
             && <button onClick={onPromote}>Promote</button>
         }
         { canDelete(readOnly, admin, isColors)
@@ -43,23 +41,37 @@ const DataRow = (props) => {
   )
 }
 
-const List = (props) => (
-  <div className="List">
-    { props.items.map((item) => (
-      <DataRow
-        key={item.id}
-        canSelect
-        {...item}
-        {...props}
-      />
-    ))}
-  </div>
-)
+DataRow.defaultProps = {
+  canSelect: true,
+  canPromote: true,
+}
+
+
+const List = (props) => {
+  const { user: { admin, promoter, pendingVerification }} = props
+  return (
+    <div className="List">
+      { props.items.map((item) => (
+        <DataRow
+          key={item.id}
+          canPromote={canPromote(
+            admin,
+            promoter,
+            pendingVerification
+          )}
+          {...item}
+          {...props}
+        />
+      ))}
+    </div>
+  )
+}
 
 const ReadOnlyList = (props) => (
   <List
     {...props}
     canSelect={false}
+    canPromote={false}
     readOnly
   />
 )
@@ -82,8 +94,8 @@ const colors = [
 
 function App() {
   const user = {
-    admin: true,
-    promoter: true,
+    admin: false,
+    promoter: false,
     pendingVerification: false,
   }
   return (
