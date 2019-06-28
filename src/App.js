@@ -29,8 +29,7 @@ const List = (props) => (
       <DataRow
         key={item.id}
         {...item}
-        user={props.user}
-        readOnly={props.readOnly}
+        {...props}
       />
     ))}
   </div>
@@ -38,8 +37,7 @@ const List = (props) => (
 
 const ReadOnlyList = (props) => (
   <List
-    items={props.items}
-    user={props.user}
+    {...props}
     readOnly
   />
 )
