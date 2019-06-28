@@ -14,10 +14,6 @@ const canPromote = (readOnly, admin, promoter, pendingVerification) => {
     )
 }
 
-const canSelect = (readOnly) => {
-  return !readOnly
-}
-
 const DataRow = (props) => {
   const {
     isColors,
@@ -33,7 +29,7 @@ const DataRow = (props) => {
     <div className="DataRow">
       <div className="Text">{text}</div>
       <div className="Controls">
-        { canSelect(readOnly)
+        { props.canSelect
             && <button onClick={onSelect}>Select</button>
         }
         { canPromote(readOnly, admin, promoter, pendingVerification)
@@ -52,6 +48,7 @@ const List = (props) => (
     { props.items.map((item) => (
       <DataRow
         key={item.id}
+        canSelect
         {...item}
         {...props}
       />
@@ -62,6 +59,7 @@ const List = (props) => (
 const ReadOnlyList = (props) => (
   <List
     {...props}
+    canSelect={false}
     readOnly
   />
 )
@@ -84,7 +82,7 @@ const colors = [
 
 function App() {
   const user = {
-    admin: false,
+    admin: true,
     promoter: true,
     pendingVerification: false,
   }
