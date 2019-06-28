@@ -45,11 +45,10 @@ const ReadOnlyList = (props) => {
   const { user: { admin}} = props
   return (
     <List
-      {...props}
+      items={props.items}
       canSelect={false}
       canPromote={false}
-      canDelete={admin && props.isColors}
-      readOnly
+      canDelete={admin && (props.isColors || props.isNames)}
     />
   )
 }
@@ -68,6 +67,14 @@ const colors = [
   { id: 'blue', text: 'blue' },
   { id: 'indigo', text: 'indigo' },
   { id: 'violet', text: 'violet' },
+]
+
+const names = [
+  { id: 'john', text: 'john' },
+  { id: 'jacob', text: 'jacob' },
+  { id: 'jingle', text: 'jingle' },
+  { id: 'heimer', text: 'heimer' },
+  { id: 'schmidt', text: 'schmidt' },
 ]
 
 const canPromote = (admin, promoter, pendingVerification) => {
@@ -97,6 +104,12 @@ function App() {
       <ReadOnlyList
         isColors
         items={colors}
+        user={user}
+      />
+
+      <ReadOnlyList
+        isNames
+        items={names}
         user={user}
       />
     </div>
