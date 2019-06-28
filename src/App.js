@@ -7,9 +7,15 @@ const canDelete = (readOnly, isAdmin, isColors) => {
     : isAdmin
 }
 
-const canPromote = (admin, promoter, pendingVerification) => {
-  return admin
-    || (promoter && !pendingVerification)
+const canPromote = (readOnly, admin, promoter, pendingVerification) => {
+  return !readOnly
+    && (admin
+      || (promoter && !pendingVerification)
+    )
+}
+
+const canSelect = (readOnly) => {
+  return !readOnly
 }
 
 const DataRow = (props) => {
@@ -27,11 +33,10 @@ const DataRow = (props) => {
     <div className="DataRow">
       <div className="Text">{text}</div>
       <div className="Controls">
-        { !readOnly
+        { canSelect(readOnly)
             && <button onClick={onSelect}>Select</button>
         }
-        { !readOnly
-            && canPromote(admin, promoter, pendingVerification)
+        { canPromote(readOnly, admin, promoter, pendingVerification)
             && <button onClick={onPromote}>Promote</button>
         }
         { canDelete(readOnly, admin, isColors)
@@ -79,9 +84,9 @@ const colors = [
 
 function App() {
   const user = {
-    admin: true,
+    admin: false,
     promoter: true,
-    pendingVerification: true,
+    pendingVerification: false,
   }
   return (
     <div className="App">
