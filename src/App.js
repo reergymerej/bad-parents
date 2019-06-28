@@ -7,6 +7,9 @@ const DataRow = (props) => (
     <div className="Controls">
       <button onClick={props.onSelect}>Select</button>
       { props.user && props.user.admin
+        && <button onClick={props.onPromote}>Promote</button>
+      }
+      { props.user && props.user.admin
         && <button onClick={props.onDelete}>Delete</button>
       }
     </div>
