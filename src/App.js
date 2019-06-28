@@ -1,6 +1,18 @@
 import React from 'react';
 import './App.css';
 
+const canDelete = (readOnly, user, isColors) => {
+  const isAdmin = !!(user && user.admin)
+  if (readOnly) {
+    if (isAdmin && isColors) {
+      return true
+    }
+    return false
+  } else {
+    return isAdmin
+  }
+}
+
 const DataRow = (props) => (
   <div className="DataRow">
     <div className="Text">{props.text}</div>
@@ -15,8 +27,7 @@ const DataRow = (props) => (
             ))
           && <button onClick={props.onPromote}>Promote</button>
       }
-      { !props.readOnly
-        && (props.user && props.user.admin)
+      { canDelete(props.readOnly, props.user, props.isColors)
           && <button onClick={props.onDelete}>Delete</button>
       }
     </div>
@@ -71,6 +82,7 @@ function App() {
         user={user}
       />
       <ReadOnlyList
+        isColors
         items={colors}
         user={user}
       />
