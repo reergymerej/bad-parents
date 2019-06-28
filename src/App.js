@@ -45,21 +45,15 @@ const canDelete = (admin, isColors, isNames) => {
   return admin && (isColors || isNames)
 }
 
-const ReadOnlyList = (props) => {
-  const { user: { admin}} = props
-  return (
-    <List
-      items={props.items}
-      canSelect={false}
-      canPromote={false}
-      canDelete={
-        props.canDelete !== undefined
-          ? props.canDelete
-          : canDelete(admin, props.isColors, props.isNames)
-      }
-    />
-  )
-}
+const ReadOnlyList = (props) => (
+  <List
+    items={props.items}
+    canSelect={false}
+    canPromote={false}
+    canDelete={props.canDelete}
+  />
+)
+
 
 const items = [
   { id: 'a', text: 'Foo' },
@@ -113,12 +107,22 @@ function App() {
         isColors
         items={colors}
         user={user}
+        canDelete={canDelete(
+          user.admin,
+          true,
+          false
+        )}
       />
 
       <ReadOnlyList
         isNames
         items={names}
         user={user}
+        canDelete={canDelete(
+          user.admin,
+          false,
+          true
+        )}
       />
     </div>
   )
