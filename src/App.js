@@ -6,8 +6,11 @@ const DataRow = (props) => (
     <div className="Text">{props.text}</div>
     <div className="Controls">
       <button onClick={props.onSelect}>Select</button>
-      { props.user && (props.user.admin || props.user.promoter)
-        && <button onClick={props.onPromote}>Promote</button>
+      { props.user
+          && (props.user.admin
+            || (props.user.promoter && !props.user.pendingVerification)
+          )
+          && <button onClick={props.onPromote}>Promote</button>
       }
       { props.user && props.user.admin
         && <button onClick={props.onDelete}>Delete</button>
@@ -38,6 +41,7 @@ function App() {
   const user = {
     admin: false,
     promoter: true,
+    pendingVerification: true,
   }
   return (
     <div className="App">
