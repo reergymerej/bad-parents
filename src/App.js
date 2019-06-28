@@ -1,38 +1,46 @@
 import React from 'react';
 import './App.css';
 
-const canDelete = (readOnly, user, isColors) => {
-  const isAdmin = !!(user && user.admin)
-  if (readOnly) {
-    if (isAdmin && isColors) {
-      return true
-    }
-    return false
-  } else {
-    return isAdmin
-  }
+const canDelete = (readOnly, isAdmin, isColors) => {
+  return readOnly
+    ? isAdmin && isColors
+    : isAdmin
 }
 
-const DataRow = (props) => (
-  <div className="DataRow">
-    <div className="Text">{props.text}</div>
-    <div className="Controls">
-      { !props.readOnly
-        && <button onClick={props.onSelect}>Select</button>
-      }
-      { !props.readOnly
-          && (props.user
-            && (props.user.admin
-              || (props.user.promoter && !props.user.pendingVerification)
-            ))
-          && <button onClick={props.onPromote}>Promote</button>
-      }
-      { canDelete(props.readOnly, props.user, props.isColors)
-          && <button onClick={props.onDelete}>Delete</button>
-      }
+const canPromote = (admin, promoter, pendingVerification) => {
+  return admin
+    || (promoter && !pendingVerification)
+}
+
+const DataRow = (props) => {
+  const {
+    isColors,
+    onDelete,
+    onPromote,
+    onSelect,
+    readOnly,
+    text,
+    user = {},
+  } = props
+  const { promoter, pendingVerification, admin } = user
+  return (
+    <div className="DataRow">
+      <div className="Text">{text}</div>
+      <div className="Controls">
+        { !readOnly
+            && <button onClick={onSelect}>Select</button>
+        }
+        { !readOnly
+            && canPromote(admin, promoter, pendingVerification)
+            && <button onClick={onPromote}>Promote</button>
+        }
+        { canDelete(readOnly, admin, isColors)
+            && <button onClick={onDelete}>Delete</button>
+        }
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const List = (props) => (
   <div className="List">
@@ -73,7 +81,7 @@ function App() {
   const user = {
     admin: true,
     promoter: true,
-    pendingVerification: false,
+    pendingVerification: true,
   }
   return (
     <div className="App">
