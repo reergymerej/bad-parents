@@ -44,11 +44,6 @@ const List = (props) => {
             canPromote: props.canPromote,
             canSelect: props.canSelect,
           }}
-          canDelete={canDelete(
-            props.readOnly,
-            admin,
-            props.isColors
-          )}
           text={item.text}
         />
       ))}
@@ -96,7 +91,7 @@ const canPromote = (admin, promoter, pendingVerification) => {
 
 function App() {
   const user = {
-    admin: true,
+    admin: false,
     promoter: true,
     pendingVerification: false,
   }
@@ -111,6 +106,11 @@ function App() {
         items={items}
         user={user}
         canPromote={userCanPromote}
+        canDelete={canDelete(
+          false,
+          user.admin,
+          false
+        )}
       />
       <ReadOnlyList
         isColors
