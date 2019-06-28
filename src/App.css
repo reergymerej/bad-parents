@@ -19,6 +19,11 @@ a:hover {
   color: white;
 }
 
+.List {
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
 .DataRow {
   line-height: 2em;
   height: 2em;

@@ -5,15 +5,19 @@ const DataRow = (props) => (
   <div className="DataRow">
     <div className="Text">{props.text}</div>
     <div className="Controls">
-      <button onClick={props.onSelect}>Select</button>
-      { props.user
-          && (props.user.admin
-            || (props.user.promoter && !props.user.pendingVerification)
-          )
+      { !props.readOnly
+        && <button onClick={props.onSelect}>Select</button>
+      }
+      { !props.readOnly
+          && (props.user
+            && (props.user.admin
+              || (props.user.promoter && !props.user.pendingVerification)
+            ))
           && <button onClick={props.onPromote}>Promote</button>
       }
-      { props.user && props.user.admin
-        && <button onClick={props.onDelete}>Delete</button>
+      { !props.readOnly
+        && (props.user && props.user.admin)
+          && <button onClick={props.onDelete}>Delete</button>
       }
     </div>
   </div>
@@ -26,9 +30,18 @@ const List = (props) => (
         key={item.id}
         {...item}
         user={props.user}
+        readOnly={props.readOnly}
       />
     ))}
   </div>
+)
+
+const ReadOnlyList = (props) => (
+  <List
+    items={props.items}
+    user={props.user}
+    readOnly
+  />
 )
 
 const items = [
@@ -37,16 +50,30 @@ const items = [
   { id: 'c', text: 'Baz' },
 ]
 
+const colors = [
+  { id: 'red', text: 'red' },
+  { id: 'orange', text: 'orange' },
+  { id: 'yellow', text: 'yellow' },
+  { id: 'green', text: 'green' },
+  { id: 'blue', text: 'blue' },
+  { id: 'indigo', text: 'indigo' },
+  { id: 'violet', text: 'violet' },
+]
+
 function App() {
   const user = {
-    admin: false,
+    admin: true,
     promoter: true,
-    pendingVerification: true,
+    pendingVerification: false,
   }
   return (
     <div className="App">
       <List
         items={items}
+        user={user}
+      />
+      <ReadOnlyList
+        items={colors}
         user={user}
       />
     </div>
